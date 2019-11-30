@@ -6,6 +6,7 @@ from business.models import Cuisine,CuisineKind,Desk
 def get_menu(request):
 
 
+
 	return render(request,'order/menu.html',
 					{	
 						'cuisine_kind':cuisine_kind,
@@ -15,17 +16,7 @@ def get_menu(request):
 				)
 
 
-def order_list(request):
 
-
-	return render(request,'order/order_list.html',
-					{	
-						'choose_list':choose_list,
-						'total_price':total_price,
-					}
-				)
-
-
-def order_action(request):
+def ordering(request):
 
 	return render(request,'order/success.html')
