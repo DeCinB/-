@@ -1,5 +1,5 @@
 from django.urls import path,include
-import views
+import views.login as login
 
 urlpatterns=[
 	#收银
