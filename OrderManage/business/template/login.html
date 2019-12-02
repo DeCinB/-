@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆页面</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <style>
+        body{
+            margin: 0;
+        }
+
+        .body_div{
+            position: absolute;
+            left: 35%;
+            top: 30%;
+            max-width: 30%;
+        }
+        .butt{
+            position: absolute;
+            left: 40%;
+            top: 120%;
+        }
+        .user_name{
+           position: absolute;
+            left: 10%;
+            top: 20%;
+        }
+        .pwd{
+            position: absolute;
+            left: 10%;
+            top: 30%;
+        }
+    </style>
+</head>
+{% load static %}
+<body style="background-image: url({% static 'images/WechatIMG52.jpeg' %});
+background-size:100% 1300%">
+<h1><font color="#ffe4c4">(￣∇￣)~~~~~~欢迎登录</font></h1>
+    <div class=" body_div">
+        <br>
+        <form action="{% url 'check' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="input-group input-group-lg">
+            <span class="input-group-addon" >用户名</span>
+            <input type="text" class="form-control" name="user_name" placeholder="input your user_name"
+                   maxlength="10" autofocus required \>
+            </div>
+            <br><br>
+
+            <div class="input-group input-group-lg">
+            <span class="input-group-addon">密 码</span>
+            <input type="password" class="form-control" name="password" placeholder="input your password "
+                   size="10" autofocus required \>
+            <br><br>
+             </div>
+    <div class="butt" >
+        <input  type="submit" value="登陆"
+                style="height: 30px;width: 80px;font-size: 18px;" \>
+    </div>
+        </form>
+    </div>
+
+
+
+
+
+</body>
+</html>
