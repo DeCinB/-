@@ -1,8 +1,10 @@
 from django.urls import path,include
-import business.login as login
+from business.views import login
+
 
 urlpatterns=[
-    path('login/', login.login, name='login'),
-    
+    path('', login.login), #?name来干嘛'''name='login'''
+    path('reg/',login.reg,name='check'),
+
 ]
 
