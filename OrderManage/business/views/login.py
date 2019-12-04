@@ -13,7 +13,7 @@ def reg(request):
         for people in Manager.objects.all().values_list('name','pwd'):
             if user_name == people[0] and password == people[1]:
                 print(user_name,password)
-                return redirect('http://127.0.0.1:8000/order/menu')
+                return redirect('http://127.0.0.1:8000/order/menu')#重定向
             else:
                 print(people[0],people[1])
                 return render(request, 'business/error.html')
