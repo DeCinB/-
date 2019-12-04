@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from business.models import Manager
 from django.contrib import messages
 
 def login(request):
-    return render(request,"login.html")
+    return render(request,"business/login.html")
 
 def reg(request):
     if request.method == "POST":
@@ -13,8 +13,8 @@ def reg(request):
         for people in Manager.objects.all().values_list('name','pwd'):
             if user_name == people[0] and password == people[1]:
                 print(user_name,password)
-                return render(request, 'success.html')
+                return redirect('http://127.0.0.1:8000/order/menu')
             else:
                 print(people[0],people[1])
-                return render(request, 'error.html')
+                return render(request, 'business/error.html')
 
