@@ -2,16 +2,23 @@ from django.db import models
 import django.utils.timezone as timezone
 
 # Create your models here.
+
+
+
 class Cuisine(models.Model):
 
 
 	name=models.CharField(primary_key=True,max_length=20,verbose_name='菜名')
 	kind=models.ForeignKey('CuisineKind',to_field='kind',verbose_name='菜式',on_delete=models.CASCADE)
 	price=models.DecimalField(max_digits=5,decimal_places=2,verbose_name='价格')
-	#img=models.ImageField(verbose_name='图片',upload_to='')
+	img=models.ImageField(verbose_name='图片',upload_to="menus",default='default/cuisineph.png')
 
 	def __str__(self):
 		return self.name
+
+	class Meta:
+		ordering=['kind']
+
 
 class CuisineKind(models.Model):
 	"""docstring for CuisineKind"""
@@ -20,6 +27,10 @@ class CuisineKind(models.Model):
 
 	def __str__(self):
 		return self.kind
+
+	class Meta:
+		ordering=['kind']
+
 		
 
 class Desk(models.Model):

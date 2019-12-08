@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.views.static import serve
+from django.conf.urls import url
+from OrderManage.settings import MEDIA_ROOT
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('business/',include('business.urls')),
     path('order/',include('order.urls')),
-
-
+    url(r'media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
 ]
