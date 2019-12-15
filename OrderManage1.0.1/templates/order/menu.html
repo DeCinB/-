@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset="UTF-8">
+	<title>点餐</title>
+	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.1.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div class="container page-header">
+	<h1>点餐</h1>
+</div>
+<div class="container page-body">
+	<div class="row" style="padding-bottom: 2em;">
+		<div class="col-md-10 col-md-offset-1 " >
+			<ul class="nav nav-pills ">
+				{%for kind in cuisine_kind%}
+					<li role="presentation" class="active">
+						<a href="#kind-{{kind.kind}}">{{kind.kind}}</a>
+					</li>
+				{%endfor%}
+			</ul>
+		</div>
+		</br>
+	</div>
+
+
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1 " >
+				{% for cuisine in menu%}
+					<div id="kind-{{cuisine.kind}}"class="col-md-3">
+						<div class="thumbnail">
+							<img src="/media/{{ cuisine.img }}">
+							<div class="caption">
+								<p style="font-weight: bold;font-size: large;">{{cuisine.name}}</p>
+								<p title="菜品介绍"data-container="body" data-toggle="popover" data-placement="right"
+            data-content="{{cuisine.intro}} "style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;">{{cuisine.intro}}</p>
+								<form>
+								<span style="font-weight: bold">￥{{cuisine.price}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+								
+								<input id="{{ cuisine.cuisine_id }}_num" name="{{ cuisine.cuisine_id }}_num" type="text" value="0份" disabled="disabled" 
+	                                                       style="width:2em ;border-style: none;font-weight: bold;background: none">
+	                       
+								<div class="btn-group" role="group" aria-label="add_or_del">
+	 								<button id='add_{{cuisine.cuisine_id}}' name='add_{{cuisine.cuisine_id}}' type="button" class="btn btn-default" onclick="add_cuisine({{cuisine.cuisine_id}},{{cuisine.price}})"><big>+</big></button>
+	  								<button id='del_{{cuisine.cuisine_id}}' name='del_{{cuisine.cuisine_id}}' type="button" class="btn btn-default" disabled="disabled" onclick="del_cuisine({{cuisine.cuisine_id}},{{cuisine.price}})"><big>-</big></button>
+	  							</div>
+	  						</form>
+	  						</div>
+						</div>
+					</div>
+				{%endfor%}
+			</div>
+		</div>
+	<div class="row" style="padding-bottom: 5em;">
+		<div class="col-md-10 col-md-offset-1">
+			<form class="form-inline">
+	  			<div class="form-group">
+	  			  <label >消费总额</label>
+	  				 <input type="text" class="form-control" id="total_cost" name="total_cost" readonly value="0.00">
+	   				 <label >&nbsp;</label>
+	   				 <input type="text" class="form-control" id="customer_number" name="customer_number" placeholder="用餐人数" >
+	   				 <label >&nbsp;</label>
+	   				 <input type="text" class="form-control" id="note" name="note" placeholder="备注..."  >&nbsp;&nbsp;
+	  				<button type="button" id="placingOrder" class="btn btn-primary " onclick="place_order()">&nbsp;下单&nbsp;</button>
+	  				<button type="button" id="show_order"class="btn btn-primary"data-toggle="modal" data-target="#myOrder" disabled="disabled">已下单</button>
+	  			</div>
+			</form>
+		</div>
+	</div><!--下单条结束-->
+	<!--模态框显示订单内容-->
+<div class="modal fade" id="myOrder" tabindex="-1" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">订单详情--桌{{desk}}</h4>
+      </div>
+      <div id="order_content" class="modal-body" >
+      	<div class="row">
+      	<div id="order_cuisine_name" class="col-md-6" ></div>
+      	<div id="order_cuisine_num" class="col-md-1 col-md-offset-2" ></div>
+      	<div id="order_cuisine_price" class="col-md-1 col-md-offset-2" ></div>
+      	</div>
+
+      	<div id="order_meta">
+      		<p id="order_time"></p>
+	      	<p id="cost"></p>
+	      	<p id="num"></p>
+	      	<p id="notes"></p>
+    
+      	</div>
+      </div>
+       	
+      </div>
+      <div class="modal-footer" >
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+<script type="text/javascript">
+
+	function add_cuisine(id,price){
+		num=parseInt($("#"+id+"_num").val())+1;
+		total_cost=parseFloat($("#total_cost").val())+parseFloat(price);
+
+		if(num>0)
+			$("#del_"+id).removeAttr("disabled");
+		
+		$("#"+id+"_num").val(String(num)+'份');
+		$("#total_cost").val(total_cost);
+	}
+
+	function del_cuisine(id,price){
+		num=parseInt($("#"+id+"_num").val())-1;
+		total_cost=parseFloat($("#total_cost").val())-parseFloat(price);
+		if(num===0)
+			$("#del_"+id).attr("disabled",true);
+		$("#"+id+"_num").val(String(num)+'份');
+		$("#total_cost").val(total_cost);
+	}
+
+
+	$(function (){
+    $("[data-toggle='popover']").popover();
+	});
+
+
+	function place_order() {
+		var order_list={};
+		var total_cost=0.00;
+		var customer_number=1;
+		var note="无";
+
+
+		total_cost=$("#total_cost").val();
+		if(total_cost==="0.00"){
+			console.log("您未选择菜品！");
+			return ;
+		}
+		$("#cost").text("消费金额："+total_cost+"元");
+		console.log("消费"+total_cost);
+
+
+		customer_number=$("#customer_number").val();
+		if(customer_number==="")
+		{
+			alert("请输入用餐人数！");
+			return ;
+		}
+		console.log("用餐人数"+customer_number);
+		$("#num").text("用餐人数："+customer_number);
+
+
+		if($("#note").val())
+			note=$("#note").val()
+		$("#notes").text("备注："+note);
+
+		console.log("备注"+note);
+
+		{% for cuisine in menu %}
+			var num=parseInt($("#"+{{cuisine.cuisine_id}}+"_num").val())
+			if(num>0){
+				order_list[{{cuisine.cuisine_id}}]=num;
+				price=String(parseInt({{cuisine.price}})*parseInt(num));
+				
+				$("#order_cuisine_name").append($("<p></p>").text("{{cuisine.name}}"));
+				$("#order_cuisine_num").append($("<p></p>").text("X"+num));
+				$("#order_cuisine_price").append($("<p></p>").text("￥"+price));
+
+			}
+		{%endfor%}
+
+		order_list=JSON.stringify(order_list);
+
+		$.ajax({
+			headers: {"X-CSRFToken": '{{ csrf_token }}'},
+	        url: "/order/menu/{{desk}}",
+	        type:"post",
+	        tradition:true,
+	        dataType:'json',
+	        data:{"desk_id":{{desk}},"total_cost":total_cost,"customer_number":customer_number,"note":note,"order_list":order_list},
+	        success:function(data){
+	        	alert("下单成功！");
+	        	model_button=$("#show_order");
+	        	model_button.removeAttr("disabled");
+	        	$("#placingOrder").attr("disabled",true);
+	        	$("#order_time").text("下单时间："+data.time);
+
+
+	        },
+	        error:function(data){
+	        	alert("抱歉！下单失败");
+	        },
+	});
+	}
+
+
+
+</script>
+</body>
+</html>
