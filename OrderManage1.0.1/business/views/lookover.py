@@ -8,8 +8,10 @@ import time
 
 def income(request):
 	#查看收入
-	pass
+	return render(request,'business/income.html')
+	
 
 def analyze(request):
 	#分析菜品销售情况
-	pass
+	return render(request,'business/analyze.html')
+	

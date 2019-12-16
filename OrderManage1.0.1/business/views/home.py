@@ -8,4 +8,4 @@ import time
 
 def home(request):
 	#获得主页
-	pass
+	return render(request,'business/home.html')

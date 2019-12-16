@@ -8,11 +8,14 @@ import time
 
 def staff(request):
 	#员工管理
-	pass
+	return render(request,'business/manageStaff.html')
+	
 
 
 
 def menu(request):
 	#菜单管理
-	pass
+	return render(request,'business/manageMenu.html')
+
+	
 	
