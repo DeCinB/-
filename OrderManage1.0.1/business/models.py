@@ -71,6 +71,7 @@ class Manager(models.Model):
 	name=models.CharField(primary_key=True,max_length=20,verbose_name='登录名')
 	pwd=models.CharField(verbose_name='密码',max_length=20)
 	last_login=models.DateTimeField(verbose_name='最后登录时间',default=timezone.now)
+	tel=models.CharField(verbose_name='手机号码',max_length=11,default="未知")
 	img=models.ImageField(verbose_name='照片',upload_to="staff",default='default/staff.png')
 
 	def __str__(self):
