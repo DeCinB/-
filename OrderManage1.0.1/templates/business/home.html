@@ -1,22 +1,143 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>网站标题</title>
-	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>home</title>
+    	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.1.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <style type="text/css">
+    a { height : 200px; width : 200px;role:"button";}
+    .header{
+        width: auto;
+        height: 35px;
+    }
+    .sign-in{
+            position: absolute;
+            left: 2.5%;
+            top: 10%;
+            background-color: dimgrey;
+            color: antiquewhite;
+            height: 50px;
+            width: 60px;
+            border: 1px wheat solid;
+            border-radius: 15px;
+            text-align: center;
 
-<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.1.min.js"></script>
-<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    }
+    .unpaid{
+        position: absolute;
+        left: 80%;
+        top: 10%;
+        float: left;
+        text-align: center;
+
+    }
+    -->
+
+    </style>
 </head>
-<body>
-	
+{% load static %}
+<body style="background-image: url({% static 'images/back3.jpg' %});
+ background-size: 1300px 900px" >
+<div class="header container" style="background-color: dimgrey;font-size: 30px">
+    🍕🥤🍰🍔🌰🍗🍟🌰🍝🍠🍣🍤🍖🍞🍡🍦🍧🍫🍰🎂🍛🍚🍇🍈🍉🍊🍌🍍🍎🍑🍐🍒🍓🍅🌽🍳🍘🍛🥬🍇🍬
+</div>
+<div >
+    <a class="sign-in" href = '/business' style="line-height: 50px;font-size: 20px;font-family: 'Times New Roman'" >
+         登录
+    </a>
+</div>
+
+<div class="container page-body">
+    <div class = "row" style="position: absolute;left: 2%;top: 20%;">
+    <div class="col-md-6">
+    <p>
+        <a class="btn btn-default" href='/business/managemenu' target="_blank" style="color: antiquewhite ;display: block;line-height: 200px;background-color: dimgrey;border-radius: 20%;font-size: 30px;font-family: 'Times New Roman'">
+        菜单管理
+        </a>
+            <br><br> <br><br> <br><br>
+        <a class="btn btn-default" href='/business/income' target="_blank" style="color: antiquewhite ;display: block;line-height: 200px;background-color: dimgrey;border-radius: 20%;font-size: 30px;font-family: 'Times New Roman'">
+        收入详情
+        </a>
+    </p>
+    </div>
+    <div class="col-md-6">
+        <p>
+        <a class="btn btn-default" href='/business/analyze' target="_blank" style="color: antiquewhite ;display: block;line-height: 200px;background-color: dimgrey;border-radius: 20%;font-size: 30px;font-family: 'Times New Roman'">
+        销售分析
+        </a>
+            <br><br> <br><br> <br><br>
+        <a class="btn btn-default" href='/business/managestaff' target="_blank" style="color: antiquewhite ;display: block;line-height: 200px;background-color: dimgrey;border-radius: 20%;font-size: 30px;font-family: 'Times New Roman'">
+        用户管理
+        </a>
+    </p>
+    </div>
+    </div>
+</div>
+<div class="unpaid" >
+       <ul>
+            {% for unpaid in unpaid_list %}
+           <!-- Button trigger modal -->
+           <button type="button" id="butt{{unpaid.desk_id}}" class="btn btn-primary btn-lg" data-toggle="modal" data-target='#{{unpaid.desk_id}}'>{{unpaid.desk_id}}</button>
+           <br><br>
+            <!-- Modal -->
+            <div class="modal fade" id='{{unpaid.desk_id}}' tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                    <h4 class="modal-title" id="myModalLabel">订单详情---{{unpaid.desk_id}}</h4>
+                  </div>
+                  <div class="modal-body">
+                      {% for order_id,dishes in dish_dict.items %}
+                            {% if order_id == unpaid.order_id %}
+                                <p style="text-align: left">已点菜品如下：</p>
+                                {% for dish in dishes %}
+                                    <p style="position: absolute;left: 10%">{{dish.name}}  X   {{dish.num}}</p>
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
+                      {% endfor %}
+                      <br>
+                      <p style="text-align: left">下单时间：{{unpaid.time}}</p>
+                      <p style="text-align: left">消费金额：{{unpaid.total_cost}}</p>
+                      <p style="text-align: left">用餐人数：{{unpaid.customer_num}}</p>
+                      <p style="text-align: left">备注：{{unpaid.note}}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="change_state({{unpaid.order_id}})" id="ascertain">确认已付款</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+           {% endfor %}
+        </ul>
+    </div>
 <!--html内容-->
 
-
 <script type="text/javascript">
-//javascricpt内容
+    function change_state(id){
+        $.ajax({
+            headers: {"X-CSRFToken": '{{ csrf_token }}'},
+            url: "/business/home/",
+            type:"post",
+	        tradition:true,
+	        dataType:'json',
+            data:{"order_id":id},
+            success:function (){
+                alert("更改成功～～～");
+                window.location.reload() //刷新页面
+            },
+            error:function (){
+                    alert("更改失败！！！");
+                },
+        });
+    }
 
 </script>
 </body>
